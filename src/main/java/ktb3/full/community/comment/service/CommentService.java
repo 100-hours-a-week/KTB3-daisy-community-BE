@@ -106,7 +106,7 @@ public class CommentService {
 
         if (!comment.getUserId().equals(userId)) {
             throw new ForbiddenException(List.of(
-                    new ErrorDetail("userId", "not_author", "작성자만 수정할 수 있습니다.")
+                    new ErrorDetail("userId", "not_author", "작성자만 삭제할 수 있습니다.")
             ));
         }
         commentRepository.deleteById(commentId);
