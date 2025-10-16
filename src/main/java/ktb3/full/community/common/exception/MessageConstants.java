@@ -6,7 +6,7 @@ public class MessageConstants {
     public static final String NOT_NULL_PASSWORD_CONFIRM = "비밀번호를 한 번 더 입력해주세요.";
     public static final String NOT_NULL_NICKNAME = "닉네임을 입력해주세요.";
     public static final String NOT_NULL_TITLE = "제목을 입력해주세요.";
-    public static final String NOT_NULL_CONTENT = "제목을 입력해주세요.";
+    public static final String NOT_NULL_CONTENT = "내용을 입력해주세요.";
 
     public static final String EMAIL_PATTERN = "올바른 이메일 주소 형식을 입력해주세요.(예: example@example.com)";
     public static final String PASSWORD_PATTERN = "올바른 비밀번호 형식을 입력해주세요.(대문자, 소문자, 숫자, 특수문자를 각각 최소 1개 포함해야합니다.)";
