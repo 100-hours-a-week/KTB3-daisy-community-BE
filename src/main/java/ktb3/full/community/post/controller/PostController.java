@@ -47,7 +47,7 @@ public class PostController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<PostResponse>> update(@PathVariable Long id, @RequestBody PostUpdateRequest dto, HttpServletRequest req) {
+    public ResponseEntity<ApiResponse<PostResponse>> update(@PathVariable Long id, @Valid @RequestBody PostUpdateRequest dto, HttpServletRequest req) {
         Long userId = (Long) req.getAttribute("userId");
         Post post = postService.update(id, userId, dto);
         return ResponseEntity.ok(ApiResponse.ok("post updated", PostResponse.from(post)));
