@@ -1,4 +1,4 @@
-package ktb3.full.community.comment.Repository;
+package ktb3.full.community.comment.repository;
 
 import ktb3.full.community.comment.domain.Comment;
 import org.springframework.stereotype.Repository;

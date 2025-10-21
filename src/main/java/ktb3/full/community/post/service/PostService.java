@@ -24,23 +24,13 @@ public class PostService {
     private final PostRepository postRepository;
 
     public List<PostResponse> list(String sort, int limit) {
-        String key = (sort == null ? "recent" : sort.toLowerCase());
-        if (!Set.of("recent", "oldest", "views").contains(key)) {
-            throw new BadRequestException(List.of(
-                    new ErrorDetail("sort", "invalid_value", "허용되지 않는 정렬입니다.")
-            ));
-        }
         if (limit <= 0 || limit > 20) {
             throw new BadRequestException(List.of(
                     new ErrorDetail("limit", "invalid_value", "limit은 1 ~ 20 사이입니다.")
             ));
         }
 
-        Comparator<Post> comparator = switch (sort == null ? "recent" : sort) {
-            case "views" -> Comparator.comparing(Post::getViewCount).reversed();
-            case "oldest" -> Comparator.comparing(Post::getCreatedAt);
-            default -> Comparator.comparing(Post::getCreatedAt).reversed();
-        };
+        Comparator<Post> comparator = PostSort.of(sort).comparator;
         return postRepository.findAll().stream()
                 .sorted(comparator)
                 .limit(limit > 0 ? limit : 20)

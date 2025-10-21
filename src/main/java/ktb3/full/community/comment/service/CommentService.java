@@ -1,17 +1,15 @@
 package ktb3.full.community.comment.service;
 
-import ktb3.full.community.comment.Repository.CommentRepository;
+import ktb3.full.community.comment.repository.CommentRepository;
 import ktb3.full.community.comment.domain.Comment;
 import ktb3.full.community.comment.dto.request.CommentCreateRequest;
 import ktb3.full.community.comment.dto.request.CommentUpdateRequest;
 import ktb3.full.community.comment.dto.response.CommentResponse;
 import ktb3.full.community.common.exception.ErrorDetail;
 import ktb3.full.community.common.exception.custom.BadRequestException;
-import ktb3.full.community.common.exception.custom.ConflictException;
 import ktb3.full.community.common.exception.custom.ForbiddenException;
 import ktb3.full.community.common.exception.custom.NotFoundException;
 import ktb3.full.community.post.domain.Post;
-import ktb3.full.community.post.dto.response.PostResponse;
 import ktb3.full.community.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,12 +26,6 @@ public class CommentService {
     private final PostRepository postRepository;
 
     public List<CommentResponse> list(Long postId, String sort, int limit) {
-        String key = (sort == null ? "recent" : sort.toLowerCase());
-        if (!Set.of("recent", "oldest").contains(key)) {
-            throw new BadRequestException(List.of(
-                    new ErrorDetail("sort", "invalid_value", "허용되지 않는 정렬입니다.")
-            ));
-        }
         if (limit == 0 || limit > 20) {
             throw new BadRequestException(List.of(
                     new ErrorDetail("limit", "invalid_value", "limit은 1 ~ 20 사이입니다.")
@@ -43,12 +35,8 @@ public class CommentService {
                 new NotFoundException(List.of(
                         new ErrorDetail("postId", "post_not_found", "게시글을 찾을 수 없습니다.")
                 )));
-        Comparator<Comment> comparator;
-        if ("recent".equalsIgnoreCase(key)) {
-            comparator = Comparator.comparing(Comment::getCreatedAt).reversed();
-        } else {
-            comparator = Comparator.comparing(Comment::getCreatedAt);
-        }
+        Comparator<Comment> comparator = CommentSort.of(sort).comparator;
+
         return commentRepository.findByPostId(post.getId()).stream()
                 .sorted(comparator)
                 .limit(limit)
@@ -106,7 +94,7 @@ public class CommentService {
 
         if (!comment.getUserId().equals(userId)) {
             throw new ForbiddenException(List.of(
-                    new ErrorDetail("userId", "not_author", "작성자만 수정할 수 있습니다.")
+                    new ErrorDetail("userId", "not_author", "작성자만 삭제할 수 있습니다.")
             ));
         }
         commentRepository.deleteById(commentId);

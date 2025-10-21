@@ -4,7 +4,7 @@ import ktb3.full.community.auth.domain.RefreshToken;
 import ktb3.full.community.auth.dto.request.LoginRequest;
 import ktb3.full.community.auth.dto.response.TokenResponse;
 import ktb3.full.community.auth.jwt.JwtProvider;
-import ktb3.full.community.auth.repository.InMemoryRefreshTokenRepository;
+import ktb3.full.community.auth.repository.RefreshTokenRepository;
 import ktb3.full.community.common.exception.ErrorDetail;
 import ktb3.full.community.common.exception.custom.NotFoundException;
 import ktb3.full.community.common.exception.custom.UnAuthorizationException;
@@ -20,7 +20,7 @@ import java.util.List;
 public class AuthService {
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
-    private final InMemoryRefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public TokenResponse login(LoginRequest loginRequest) {
         String email = loginRequest.getEmail().trim().toLowerCase();

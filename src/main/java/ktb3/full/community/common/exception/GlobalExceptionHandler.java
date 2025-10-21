@@ -23,11 +23,11 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.fail("bad request", errors));
     }
 
-//    @ExceptionHandler
-//    public ResponseEntity<ApiResponse<?>> handleBadRequest(BadRequestException ex) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(ApiResponse.fail(ex.getMessage(), ex.getErrors()));
-//    }
+    @ExceptionHandler
+    public ResponseEntity<ApiResponse<?>> handleBadRequest(BadRequestException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.fail(ex.getMessage(), ex.getErrors()));
+    }
 
     @ExceptionHandler(UnAuthorizationException.class)
     public ResponseEntity<ApiResponse<?>> handleUnAuthorizationError (UnAuthorizationException ex) {
