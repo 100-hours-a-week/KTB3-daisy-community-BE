@@ -1,6 +1,6 @@
-package ktb3.full.community.post.service;
+package ktb3.full.community.Post.service;
 
-import ktb3.full.community.post.domain.Post;
+import ktb3.full.community.Post.domain.Post;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -9,8 +9,8 @@ import java.util.Comparator;
 public enum PostSort {
     RECENT(Comparator.comparing(Post::getCreatedAt).reversed()),
     OLDEST(Comparator.comparing(Post::getCreatedAt)),
-    VIEWS(Comparator.comparing(Post::getViewCount).reversed()),
-    LIKES(Comparator.comparing(Post::getLikes).reversed());
+    VIEWS(Comparator.comparing(Post::getViewCount).reversed());
+    //LIKES(Comparator.comparing(Post::getLikes).reversed());
 
     public final Comparator<Post> comparator;
 

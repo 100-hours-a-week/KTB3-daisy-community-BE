@@ -1,6 +1,7 @@
-package ktb3.full.community.post.repository;
+package ktb3.full.community.Post.repository;
 
-import ktb3.full.community.post.domain.Post;
+import ktb3.full.community.Post.domain.Post;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -8,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
+@Profile("mem")
 public class InMemoryPostRepository implements PostRepository {
     private static final Map<Long, Post> posts = new ConcurrentHashMap<>();
     private static final AtomicLong sequence = new AtomicLong(0);
@@ -34,8 +36,8 @@ public class InMemoryPostRepository implements PostRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        posts.remove(id);
-
+    public List<Post> findAllByDeletedFalse() {
+        return List.of();
     }
+
 }
