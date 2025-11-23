@@ -33,7 +33,7 @@ public class CommentController {
             @PathVariable Long postId,
             @Valid @RequestBody CommentCreateRequest dto,
             @LoginUser Long userId
-            ) {
+    ) {
         CommentResponse comment = commentService.create(postId, userId, dto);
         return  ResponseEntity.ok(ApiResponse.ok("comment created successfully", comment));
     }
