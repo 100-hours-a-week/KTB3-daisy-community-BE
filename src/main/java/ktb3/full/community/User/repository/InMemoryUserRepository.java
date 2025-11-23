@@ -1,12 +1,14 @@
-package ktb3.full.community.user.repository;
+package ktb3.full.community.User.repository;
 
-import ktb3.full.community.user.domain.User;
+import ktb3.full.community.User.domain.User;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
+@Profile("mem")
 public class InMemoryUserRepository implements UserRepository {
     private static Map<Long, User> userMap = new LinkedHashMap<>();
     private static final AtomicLong sequence = new AtomicLong(0);
@@ -15,6 +17,10 @@ public class InMemoryUserRepository implements UserRepository {
         if(usersMap.isEmpty()){
         }
     }*/
+
+    public long count() {
+        return userMap.size();
+    }
 
     public User save(User user) {
         if(user.getId() == null) {
@@ -43,10 +49,10 @@ public class InMemoryUserRepository implements UserRepository {
         return userMap.values().stream().filter(user -> nickname.equalsIgnoreCase(user.getNickname())).findFirst();
     }
 
-    @Override
+    /*@Override
     public List<User> findAll() {
         return new ArrayList<>(userMap.values());
-    }
+    }*/
 
     @Override
     public boolean existsByEmail(String email) {
@@ -56,12 +62,6 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public boolean existsByNickname(String nickname) {
         return findByNickname(nickname).isPresent();
-
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        userMap.remove(id);
 
     }
 

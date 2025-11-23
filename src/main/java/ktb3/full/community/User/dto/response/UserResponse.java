@@ -1,10 +1,11 @@
-package ktb3.full.community.user.dto.response;
+package ktb3.full.community.User.dto.response;
 
-import ktb3.full.community.user.domain.User;
+import ktb3.full.community.User.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +16,7 @@ public class UserResponse {
     private String  email;
     private String nickname;
     private String profileImage;
-    private LocalDateTime createAt;
+    private Instant createdAt;
 
     public static UserResponse from(User user) {
         return new UserResponse(
@@ -23,7 +24,7 @@ public class UserResponse {
                 user.getEmail(),
                 user.getNickname(),
                 user.getProfileImage(),
-                user.getCreateAt()
+                user.getCreatedAt()
         );
     }
 }
