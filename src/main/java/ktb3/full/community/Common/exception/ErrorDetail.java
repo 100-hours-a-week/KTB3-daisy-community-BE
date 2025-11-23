@@ -1,4 +1,4 @@
-package ktb3.full.community.common.exception;
+package ktb3.full.community.Common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

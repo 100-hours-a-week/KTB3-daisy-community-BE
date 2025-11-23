@@ -1,4 +1,4 @@
-package ktb3.full.community.auth.dto.request;
+package ktb3.full.community.Auth.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static ktb3.full.community.common.exception.MessageConstants.*;
-import static ktb3.full.community.common.exception.MessageConstants.PASSWORD_PATTERN;
+import static ktb3.full.community.Common.exception.MessageConstants.*;
+import static ktb3.full.community.Common.exception.MessageConstants.PASSWORD_PATTERN;
 
 @Getter
 @NoArgsConstructor

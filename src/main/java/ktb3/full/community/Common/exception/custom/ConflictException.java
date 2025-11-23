@@ -1,6 +1,6 @@
-package ktb3.full.community.common.exception.custom;
+package ktb3.full.community.Common.exception.custom;
 
-import ktb3.full.community.common.exception.ErrorDetail;
+import ktb3.full.community.Common.exception.ErrorDetail;
 
 import java.util.List;
 

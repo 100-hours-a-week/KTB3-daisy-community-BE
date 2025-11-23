@@ -1,4 +1,4 @@
-package ktb3.full.community.common.exception;
+package ktb3.full.community.Common.exception;
 
 public class MessageConstants {
     public static final String NOT_NULL_EMAIL = "이메일을 입력해주세요.";

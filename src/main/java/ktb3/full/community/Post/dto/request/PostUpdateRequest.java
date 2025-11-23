@@ -1,4 +1,4 @@
-package ktb3.full.community.post.dto.request;
+package ktb3.full.community.Post.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static ktb3.full.community.common.exception.MessageConstants.*;
+import static ktb3.full.community.Common.exception.MessageConstants.*;
 
 @Getter
 @NoArgsConstructor

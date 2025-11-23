@@ -1,4 +1,4 @@
-package ktb3.full.community.user.dto.request;
+package ktb3.full.community.User.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static ktb3.full.community.common.exception.MessageConstants.NICKNAME_PATTERN;
-import static ktb3.full.community.common.exception.MessageConstants.NOT_NULL_NICKNAME;
+import static ktb3.full.community.Common.exception.MessageConstants.NICKNAME_PATTERN;
+import static ktb3.full.community.Common.exception.MessageConstants.NOT_NULL_NICKNAME;
 
 @Getter
 @NoArgsConstructor

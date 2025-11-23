@@ -1,4 +1,4 @@
-package ktb3.full.community.auth.dto.response;
+package ktb3.full.community.Auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
