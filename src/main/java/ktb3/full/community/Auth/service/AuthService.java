@@ -1,18 +1,20 @@
-package ktb3.full.community.auth.service;
+package ktb3.full.community.Auth.service;
 
-import ktb3.full.community.auth.domain.RefreshToken;
-import ktb3.full.community.auth.dto.request.LoginRequest;
-import ktb3.full.community.auth.dto.response.TokenResponse;
-import ktb3.full.community.auth.jwt.JwtProvider;
-import ktb3.full.community.auth.repository.RefreshTokenRepository;
-import ktb3.full.community.common.exception.ErrorDetail;
-import ktb3.full.community.common.exception.custom.NotFoundException;
-import ktb3.full.community.common.exception.custom.UnAuthorizationException;
-import ktb3.full.community.user.domain.User;
-import ktb3.full.community.user.repository.UserRepository;
+import ktb3.full.community.Auth.domain.RefreshToken;
+import ktb3.full.community.Auth.dto.request.LoginRequest;
+import ktb3.full.community.Auth.dto.response.TokenResponse;
+import ktb3.full.community.Auth.jwt.JwtProvider;
+import ktb3.full.community.Auth.repository.RefreshTokenRepository;
+import ktb3.full.community.Common.exception.ErrorDetail;
+import ktb3.full.community.Common.exception.custom.NotFoundException;
+import ktb3.full.community.Common.exception.custom.UnAuthorizationException;
+import ktb3.full.community.User.domain.User;
+import ktb3.full.community.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -22,6 +24,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     public TokenResponse login(LoginRequest loginRequest) {
         String email = loginRequest.getEmail().trim().toLowerCase();
         User user = userRepository.findByEmail(email)
@@ -31,15 +34,16 @@ public class AuthService {
             throw new UnAuthorizationException(List.of(new ErrorDetail("password", "invalid_credentials", "비밀번호가 일치하지 않습니다.")));
         }
         String accessToken = jwtProvider.createAccessToken(user.getId(), user.getEmail(), user.getRole());
-        long accessExpiration = jwtProvider.getExpiration(accessToken);
+        Instant accessExpiration = jwtProvider.getExpiration(accessToken);
         String refreshToken = jwtProvider.createRefreshToken(user.getId());
-        long refreshExpiration = jwtProvider.getExpiration(refreshToken);
+        Instant refreshExpiration = jwtProvider.getExpiration(refreshToken);
 
-        refreshTokenRepository.save(new RefreshToken(user.getId(), refreshToken, refreshExpiration, false));
+        refreshTokenRepository.save(new RefreshToken(user, refreshToken, refreshExpiration));
 
-        return new TokenResponse(accessToken, accessExpiration, refreshToken, refreshExpiration);
+        return new TokenResponse(accessToken, accessExpiration.toEpochMilli(), refreshToken, refreshExpiration.toEpochMilli());
     }
 
+    @Transactional
     public TokenResponse refresh(String oldRefreshToken) {
         if (oldRefreshToken == null || oldRefreshToken.isEmpty()) {
             throw new UnAuthorizationException(List.of(
@@ -71,11 +75,11 @@ public class AuthService {
         refreshTokenRepository.delete(oldRefreshToken);
 
         String accessToken = jwtProvider.createAccessToken(user.getId(), user.getEmail(), user.getRole());
-        long accessExpiration = jwtProvider.getExpiration(accessToken);
+        Instant accessExpiration = jwtProvider.getExpiration(accessToken);
         String refreshToken = jwtProvider.createRefreshToken(user.getId());
-        long refreshExpiration = jwtProvider.getExpiration(refreshToken);
+        Instant refreshExpiration = jwtProvider.getExpiration(refreshToken);
 
-        refreshTokenRepository.save(new RefreshToken(user.getId(), refreshToken, refreshExpiration, false));
-        return new TokenResponse(accessToken, accessExpiration, refreshToken, refreshExpiration);
+        refreshTokenRepository.save(new RefreshToken(user, refreshToken, refreshExpiration));
+        return new TokenResponse(accessToken, accessExpiration.toEpochMilli(), refreshToken, refreshExpiration.toEpochMilli());
     }
 }
