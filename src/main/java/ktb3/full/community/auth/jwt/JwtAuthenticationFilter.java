@@ -1,4 +1,4 @@
-package ktb3.full.community.Auth.jwt;
+package ktb3.full.community.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
@@ -8,8 +8,8 @@ import jakarta.servlet.ServletException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ktb3.full.community.Common.exception.ErrorDetail;
-import ktb3.full.community.Common.response.ApiResponse;
+import ktb3.full.community.common.exception.ErrorDetail;
+import ktb3.full.community.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
