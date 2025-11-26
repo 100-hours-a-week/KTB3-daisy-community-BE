@@ -5,10 +5,13 @@ import ktb3.full.community.Common.exception.ErrorDetail;
 import ktb3.full.community.Common.exception.custom.BadRequestException;
 import ktb3.full.community.Common.exception.custom.ForbiddenException;
 import ktb3.full.community.Common.exception.custom.NotFoundException;
+import ktb3.full.community.Common.pagination.ScrollPaginationCollection;
 import ktb3.full.community.Post.domain.Post;
 import ktb3.full.community.Post.dto.request.PostCreateRequest;
 import ktb3.full.community.Post.dto.request.PostUpdateRequest;
 import ktb3.full.community.Post.dto.response.PostResponse;
+import ktb3.full.community.Post.dto.response.PostScrollResponse;
+import ktb3.full.community.Post.repository.PostJpaRepository;
 import ktb3.full.community.Post.repository.PostRepository;
 import ktb3.full.community.User.domain.User;
 import ktb3.full.community.User.repository.UserRepository;
@@ -22,23 +25,32 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+    private static final int SCROLL_SIZE = 7;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final PostJpaRepository postJpaRepository;
 
     @Transactional
-    public List<PostResponse> list(String sort, int limit) {
-        if (limit <= 0 || limit > 20) {
-            throw new BadRequestException(List.of(
-                    new ErrorDetail("limit", "invalid_value", "limit은 1 ~ 20 사이입니다.")
-            ));
-        }
+    public PostScrollResponse scroll(Long cursor) {
 
-        Comparator<Post> comparator = PostSort.of(sort).comparator;
-        return postRepository.findAllByDeletedFalse().stream()
-                .sorted(comparator)
-                .limit(limit > 0 ? limit : 20)
+        List<Post> posts = postRepository.findScroll(cursor, SCROLL_SIZE + 1);
+
+        ScrollPaginationCollection<Post> scrollPage =
+                ScrollPaginationCollection.of(posts, SCROLL_SIZE);
+
+        boolean last = scrollPage.isLastScroll();
+
+        List<PostResponse> items = scrollPage.getCurrentScrollItems().stream()
                 .map(PostResponse::from)
                 .collect(Collectors.toList());
+
+        Long nextCursor = null;
+        if(!last && !items.isEmpty()) {
+            Post nextCursorPost = scrollPage.getNextCursor();
+            nextCursor = nextCursorPost.getId();
+        }
+
+        return new PostScrollResponse(items, nextCursor, last);
     }
 
     @Transactional
@@ -59,6 +71,7 @@ public class PostService {
 
     @Transactional
     public PostResponse create(Long userId, PostCreateRequest dto) {
+        System.out.println(">>> PostService.create userId = " + userId);
         User user = findUserBy(userId);
         Post post = dto.toEntity(user);
         Post savedPost = postRepository.save(post);

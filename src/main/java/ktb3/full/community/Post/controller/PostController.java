@@ -6,6 +6,7 @@ import ktb3.full.community.Common.response.ApiResponse;
 import ktb3.full.community.Post.dto.request.PostCreateRequest;
 import ktb3.full.community.Post.dto.request.PostUpdateRequest;
 import ktb3.full.community.Post.dto.response.PostResponse;
+import ktb3.full.community.Post.dto.response.PostScrollResponse;
 import ktb3.full.community.Post.repository.PostRepository;
 import ktb3.full.community.Post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,10 @@ public class PostController {
     private final PostRepository postRepository;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<PostResponse>>> list(
-            @RequestParam(defaultValue = "recent") String sort,
-            @RequestParam(defaultValue = "20") int limit
+    public ResponseEntity<ApiResponse<PostScrollResponse>> list(
+            @RequestParam(required = false) Long cursor
     ) {
-        List<PostResponse> posts = postService.list(sort, limit);
+        PostScrollResponse posts = postService.scroll(cursor);
         return ResponseEntity.ok(ApiResponse.ok("posts loaded successfully",posts));
     }
 

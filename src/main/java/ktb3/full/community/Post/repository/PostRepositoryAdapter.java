@@ -3,6 +3,7 @@ package ktb3.full.community.Post.repository;
 import ktb3.full.community.Post.domain.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,6 +33,16 @@ public class PostRepositoryAdapter implements PostRepository {
     @Override
     public List<Post> findAllByDeletedFalse() {
         return postJpaRepository.findAllByDeletedFalse();
+    }
+
+    @Override
+    public List<Post> findScroll(Long cursor, int size) {
+        PageRequest pageRequest = PageRequest.of(0, size);
+
+        if(cursor == null) {
+            return postJpaRepository.findByDeletedFalseOrderByIdDesc(pageRequest);
+        }
+        return postJpaRepository.findByIdLessThanAndDeletedFalseOrderByIdDesc(cursor, pageRequest);
     }
 
 }

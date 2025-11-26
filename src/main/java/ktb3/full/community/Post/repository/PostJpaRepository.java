@@ -2,6 +2,7 @@ package ktb3.full.community.Post.repository;
 
 import ktb3.full.community.Post.domain.Post;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,5 +21,7 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
     int decreaseLikeCount(@Param("postId") Long postId);
 
     List<Post> findAllByDeletedFalse();
+    List<Post> findByDeletedFalseOrderByIdDesc(Pageable pageable);
+    List<Post> findByIdLessThanAndDeletedFalseOrderByIdDesc(Long id, Pageable pageable);
 
 }

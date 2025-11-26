@@ -10,4 +10,5 @@ public interface PostRepository {
     Optional<Post> findById(Long id);
     List<Post> findAll();
     List<Post> findAllByDeletedFalse();
+    List<Post> findScroll(Long cursor, int size);
 }

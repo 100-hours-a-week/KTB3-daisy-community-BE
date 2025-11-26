@@ -40,4 +40,8 @@ public class InMemoryPostRepository implements PostRepository {
         return List.of();
     }
 
+    @Override
+    public List<Post> findScroll(Long cursor, int size) {
+        return List.of();
+    }
 }
