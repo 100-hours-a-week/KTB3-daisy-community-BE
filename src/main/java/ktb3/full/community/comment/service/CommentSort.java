@@ -1,6 +1,6 @@
-package ktb3.full.community.comment.service;
+package ktb3.full.community.Comment.service;
 
-import ktb3.full.community.comment.domain.Comment;
+import ktb3.full.community.Comment.domain.Comment;
 
 import java.util.Arrays;
 import java.util.Comparator;

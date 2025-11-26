@@ -1,7 +1,7 @@
-package ktb3.full.community.common.exception;
+package ktb3.full.community.Common.exception;
 
-import ktb3.full.community.common.exception.custom.*;
-import ktb3.full.community.common.response.ApiResponse;
+import ktb3.full.community.Common.exception.custom.*;
+import ktb3.full.community.Common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

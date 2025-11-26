@@ -1,13 +1,13 @@
-package ktb3.full.community.auth.controller;
+package ktb3.full.community.Auth.controller;
 
 import jakarta.servlet.http.Cookie;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import ktb3.full.community.auth.dto.request.LoginRequest;
-import ktb3.full.community.auth.dto.response.TokenResponse;
-import ktb3.full.community.auth.service.AuthService;
-import ktb3.full.community.common.response.ApiResponse;
+import ktb3.full.community.Auth.dto.request.LoginRequest;
+import ktb3.full.community.Auth.dto.response.TokenResponse;
+import ktb3.full.community.Auth.service.AuthService;
+import ktb3.full.community.Common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpHeaders;

@@ -1,9 +1,10 @@
-package ktb3.full.community.post.dto.response;
+package ktb3.full.community.Post.dto.response;
 
-import ktb3.full.community.post.domain.Post;
+import ktb3.full.community.Post.domain.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,21 +12,27 @@ import java.time.LocalDateTime;
 public class PostResponse {
     private Long id;
     private Long userId;
+    private String nickname;
+    private String profileImage;
     private String title;
     private String content;
-    private Long viewCount;
-    private int likes;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int viewCount;
+    private int likeCount;
+    private int commentCount;
+    private Instant createdAt;
+    private Instant updatedAt;
 
     public static PostResponse from(Post post) {
         return new PostResponse(
                 post.getId(),
-                post.getUserId(),
+                post.getUser().getId(),
+                post.getUser().getNickname(),
+                post.getUser().getProfileImage(),
                 post.getTitle(),
                 post.getContent(),
                 post.getViewCount(),
-                post.getLikes(),
+                post.getLikeCount(),
+                post.getCommentCount(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );

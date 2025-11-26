@@ -1,4 +1,4 @@
-package ktb3.full.community.common.response;
+package ktb3.full.community.Common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

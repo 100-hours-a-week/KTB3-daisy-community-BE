@@ -1,18 +1,17 @@
-package ktb3.full.community.user.dto.request;
+package ktb3.full.community.User.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static ktb3.full.community.common.exception.MessageConstants.*;
+import static ktb3.full.community.Common.exception.MessageConstants.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSignupRequest {
-    private Long id;
-
     @NotBlank(message = NOT_NULL_EMAIL)
     @Email(message = EMAIL_PATTERN)
     private String email;
@@ -33,6 +32,7 @@ public class UserSignupRequest {
     private String profileImage;
 
     @AssertTrue(message = PASSWORD_MISMATCH)
+    @Schema(hidden = true)
     public boolean isPasswordMatched() {
         if (password == null || passwordConfirm == null) return false;
         return password.equals(passwordConfirm);

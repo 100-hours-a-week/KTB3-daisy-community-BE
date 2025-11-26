@@ -1,6 +1,6 @@
-package ktb3.full.community.common.config;
+package ktb3.full.community.Common.config;
 
-import ktb3.full.community.auth.jwt.JwtAuthenticationFilter;
+import ktb3.full.community.Auth.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
