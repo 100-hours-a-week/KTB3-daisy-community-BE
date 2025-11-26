@@ -1,5 +1,6 @@
 package ktb3.full.community.Comment.service;
 
+import ktb3.full.community.Comment.dto.response.CommentScrollResponse;
 import ktb3.full.community.Comment.repository.CommentRepository;
 import ktb3.full.community.Comment.domain.Comment;
 import ktb3.full.community.Comment.dto.request.CommentCreateRequest;
@@ -9,6 +10,7 @@ import ktb3.full.community.Common.exception.ErrorDetail;
 import ktb3.full.community.Common.exception.custom.BadRequestException;
 import ktb3.full.community.Common.exception.custom.ForbiddenException;
 import ktb3.full.community.Common.exception.custom.NotFoundException;
+import ktb3.full.community.Common.pagination.ScrollPaginationCollection;
 import ktb3.full.community.Post.domain.Post;
 import ktb3.full.community.Post.repository.PostRepository;
 import ktb3.full.community.User.domain.User;
@@ -24,28 +26,34 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
+    private static final int SCROLL_SIZE = 7;
+
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public List<CommentResponse> list(Long postId, String sort, int limit) {
-        if (limit == 0 || limit > 20) {
-            throw new BadRequestException(List.of(
-                    new ErrorDetail("limit", "invalid_value", "limit은 1 ~ 20 사이입니다.")
-            ));
-        }
+    public CommentScrollResponse scroll(Long postId, Long cursor) {
         Post post = postRepository.findById(postId).orElseThrow(() ->
                 new NotFoundException(List.of(
                         new ErrorDetail("postId", "post_not_found", "게시글을 찾을 수 없습니다.")
                 )));
-        Comparator<Comment> comparator = CommentSort.of(sort).comparator;
+        List<Comment> comments = commentRepository.findScroll(postId, cursor, SCROLL_SIZE + 1);
+        ScrollPaginationCollection<Comment> scrollPage =
+                ScrollPaginationCollection.of(comments, SCROLL_SIZE);
 
-        return commentRepository.findByPost_IdAndDeletedFalse(post.getId()).stream()
-                .sorted(comparator)
-                .limit(limit)
+        boolean last = scrollPage.isLastScroll();
+
+        List<CommentResponse> items = scrollPage.getCurrentScrollItems().stream()
                 .map(CommentResponse::from)
                 .collect(Collectors.toList());
+
+        Long nextCursor = null;
+        if(!last && !items.isEmpty()) {
+            Comment nextCursorComment = scrollPage.getNextCursor();
+            nextCursor = nextCursorComment.getId();
+        }
+        return new CommentScrollResponse(items, nextCursor, last);
     }
 
     @Transactional
@@ -102,7 +110,7 @@ public class CommentService {
             comment.softDelete();
 
             Post post = comment.getPost();
-            post.increaseCommentCount();
+            post.decreaseCommentCount();
         }
 
     }

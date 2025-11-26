@@ -10,4 +10,5 @@ public interface CommentRepository {
     Optional<Comment> findById(Long id);
     List<Comment> findByPostId(Long id);
     List<Comment> findByPost_IdAndDeletedFalse(Long id);
+    List<Comment> findScroll(Long postId, Long cursor, int size);
 }

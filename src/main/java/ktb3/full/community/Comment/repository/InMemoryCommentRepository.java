@@ -39,4 +39,9 @@ public class InMemoryCommentRepository implements CommentRepository {
     public List<Comment> findByPost_IdAndDeletedFalse(Long id) {
         return List.of();
     }
+
+    @Override
+    public List<Comment> findScroll(Long postId, Long cursor, int size) {
+        return List.of();
+    }
 }

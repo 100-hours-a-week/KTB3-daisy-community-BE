@@ -5,6 +5,7 @@ import ktb3.full.community.Auth.resolver.LoginUser;
 import ktb3.full.community.Comment.dto.request.CommentCreateRequest;
 import ktb3.full.community.Comment.dto.request.CommentUpdateRequest;
 import ktb3.full.community.Comment.dto.response.CommentResponse;
+import ktb3.full.community.Comment.dto.response.CommentScrollResponse;
 import ktb3.full.community.Comment.service.CommentService;
 import ktb3.full.community.Common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,10 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CommentResponse>>> list(
+    public ResponseEntity<ApiResponse<CommentScrollResponse>> list(
             @PathVariable Long postId,
-            @RequestParam(defaultValue = "recent") String sort,
-            @RequestParam(defaultValue = "20") int limit) {
-        List<CommentResponse> comments = commentService.list(postId, sort, limit);
+            @RequestParam(required = false) Long cursor) {
+        CommentScrollResponse comments = commentService.scroll(postId, cursor);
         return ResponseEntity.ok(ApiResponse.ok("comments loaded successfully", comments));
     }
 

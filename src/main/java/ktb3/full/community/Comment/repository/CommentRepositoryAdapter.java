@@ -3,6 +3,7 @@ package ktb3.full.community.Comment.repository;
 import ktb3.full.community.Comment.domain.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,4 +35,12 @@ public class CommentRepositoryAdapter implements CommentRepository {
         return commentJpaRepository.findAllByPost_IdAndDeletedFalse(id);
     }
 
+    @Override
+    public List<Comment> findScroll(Long postId, Long cursor, int size) {
+        PageRequest pageRequest = PageRequest.of(0, size);
+        if(cursor == null) {
+            return commentJpaRepository.findByPost_IdAndDeletedFalseOrderByIdDesc(postId, pageRequest);
+        }
+        return commentJpaRepository.findByPost_IdAndIdLessThanAndDeletedFalseOrderByIdDesc(postId, cursor, pageRequest);
+    }
 }
