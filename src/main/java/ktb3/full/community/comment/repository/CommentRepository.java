@@ -1,6 +1,6 @@
-package ktb3.full.community.comment.repository;
+package ktb3.full.community.Comment.repository;
 
-import ktb3.full.community.comment.domain.Comment;
+import ktb3.full.community.Comment.domain.Comment;
 
 import java.util.List;
 import java.util.Optional;

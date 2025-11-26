@@ -1,6 +1,5 @@
-package ktb3.full.community.comment.controller;
+package ktb3.full.community.Comment.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import ktb3.full.community.Auth.resolver.LoginUser;
 import ktb3.full.community.Comment.dto.request.CommentCreateRequest;
@@ -33,9 +32,8 @@ public class CommentController {
     public ResponseEntity<ApiResponse<CommentResponse>> create(
             @PathVariable Long postId,
             @Valid @RequestBody CommentCreateRequest dto,
-            HttpServletRequest req
-            ) {
-        Long userId = (Long) req.getAttribute("userId");
+            @LoginUser Long userId
+    ) {
         CommentResponse comment = commentService.create(postId, userId, dto);
         return  ResponseEntity.ok(ApiResponse.ok("comment created successfully", comment));
     }
@@ -44,9 +42,8 @@ public class CommentController {
     public ResponseEntity<ApiResponse<CommentResponse>> update(
             @PathVariable Long postId, @PathVariable Long id,
             @Valid @RequestBody CommentUpdateRequest dto,
-            HttpServletRequest req
+            @LoginUser Long userId
     ) {
-        Long userId = (Long) req.getAttribute("userId");
         CommentResponse comment = commentService.update(id, userId, dto);
         return ResponseEntity.ok(ApiResponse.ok("comment updated successfully", comment));
     }
@@ -54,9 +51,8 @@ public class CommentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<CommentResponse>> delete(
             @PathVariable Long postId, @PathVariable Long id,
-            HttpServletRequest req
+            @LoginUser Long userId
     ) {
-        Long userId = (Long) req.getAttribute("userId");
         commentService.delete(id, userId);
         return ResponseEntity.noContent().build();
     }
