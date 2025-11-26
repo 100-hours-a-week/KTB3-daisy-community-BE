@@ -26,6 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws ServletException, IOException {
+        if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
+            chain.doFilter(req, res);
+            return;
+        }
         String auth = req.getHeader("Authorization");
         if (auth == null || !auth.startsWith("Bearer ")) {
             write401(res, "unauthorized",
@@ -36,6 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = auth.substring(7);
         try {
             jwtProvider.getClaims(token);
+            Long userId = jwtProvider.getUserId(token);
+            if(userId == null){
+                write401(res, "unauthorized",
+                        List.of(new ErrorDetail("Authorization", "invalid_token", "유효하지 않거나 만료된 토큰입니다.")));
+                return;
+            }
 
             req.setAttribute("userId", jwtProvider.getUserId(token));
             req.setAttribute("role", jwtProvider.getRole(token));
