@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Long userId = jwtProvider.getUserId(token);
             if(userId == null){
                 write401(res, "unauthorized",
-                        List.of(new ErrorDetail("Authorizatiopn", "invalid_token", "유효하지 않거나 만료된 토큰입니다.")));
+                        List.of(new ErrorDetail("Authorization", "invalid_token", "유효하지 않거나 만료된 토큰입니다.")));
                 return;
             }
 
