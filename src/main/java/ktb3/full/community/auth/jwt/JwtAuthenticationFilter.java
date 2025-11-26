@@ -1,4 +1,4 @@
-package ktb3.full.community.Auth.jwt;
+package ktb3.full.community.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
@@ -8,8 +8,8 @@ import jakarta.servlet.ServletException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ktb3.full.community.Common.exception.ErrorDetail;
-import ktb3.full.community.Common.response.ApiResponse;
+import ktb3.full.community.common.exception.ErrorDetail;
+import ktb3.full.community.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -26,6 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws ServletException, IOException {
+        if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
+            chain.doFilter(req, res);
+            return;
+        }
         String auth = req.getHeader("Authorization");
         if (auth == null || !auth.startsWith("Bearer ")) {
             write401(res, "unauthorized",
@@ -36,6 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = auth.substring(7);
         try {
             jwtProvider.getClaims(token);
+            Long userId = jwtProvider.getUserId(token);
+            if(userId == null){
+                write401(res, "unauthorized",
+                        List.of(new ErrorDetail("Authorization", "invalid_token", "유효하지 않거나 만료된 토큰입니다.")));
+                return;
+            }
 
             req.setAttribute("userId", jwtProvider.getUserId(token));
             req.setAttribute("role", jwtProvider.getRole(token));
